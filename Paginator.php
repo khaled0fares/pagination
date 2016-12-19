@@ -20,7 +20,7 @@ class Paginator {
 		$selectAllArticles->execute();
 		return (int) $selectAllArticles->fetchAll()[0][0];
 	}
-	
+
 
 	function positiveInt()
 	{
@@ -31,7 +31,7 @@ class Paginator {
 	function setArticlesPerPage($articlesPerPage)
 	{
 		$this->articlesPerPage	 =
-		   	(int) $articlesPerPage > $this->numberOfRecords() || (int) $articlesPerPage ==  0 			
+			(int) $articlesPerPage > $this->numberOfRecords() || (int) $articlesPerPage <=  0 			
 			?
 			$this->defaultPerPage :	(int)$articlesPerPage;
 	}
@@ -44,15 +44,15 @@ class Paginator {
 			$this->pages = 1;
 			return;
 		} 
-		
+
 		if ( $pages > $lastPagePossible ) {
 			$this->pages =  $lastPagePossible; 
 			return;
 		} 
-		
+
 		$this->pages =  $pages;
 	}
-	
+
 	function query()
 	{
 		$this->offset =  ($this->pages - 1) * $this->articlesPerPage;
