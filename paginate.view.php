@@ -1,9 +1,11 @@
 <?php
-
-$pagination = require 'paginate.php';
-$articles  =  $pagination['articles'];
-$pages =  $pagination['pages'];
-$max=  $pagination['articlesPerPage'];
+require 'Paginator.php';
+require 'Article.php';
+$connection =require 'connection.php';
+$pagination = new Paginator($connection, 10);
+$pagination->setArticlesPerPage($_GET['articlesPerPage']);
+$pagination->setPages($_GET['pages']);
+$pagination->paginate();
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +15,7 @@ $max=  $pagination['articlesPerPage'];
 	<title></title>
 </head>
 <body>
-<?php foreach ($articles as $article):  ?>
+<?php foreach ($pagination->articles as $article):  ?>
 	<h3><?= $article->title; ?></h3>
 <?php endforeach ?>
 </body>
