@@ -15,22 +15,12 @@ class Paginator {
 		$this->connection = $connection;
 	}
 
-	function query()
-	{
-		$this->offset =  ($this->pages - 1) * $this->articlesPerPage;
-		$selectAllArticles  =
-			$this->connection->prepare("SELECT * FROM articles LIMIT $this->offset,
-				$this->articlesPerPage");
-
-		$selectAllArticles->execute();
-		return  $selectAllArticles->fetchAll( PDO::FETCH_CLASS, 'Article' );
-
-	}
 	function numberOfRecords(){
 		$selectAllArticles  = $this->connection->prepare("SELECT COUNT(*) FROM articles");
 		$selectAllArticles->execute();
 		return (int) $selectAllArticles->fetchAll()[0][0];
 	}
+	
 
 	function positiveInt()
 	{
@@ -63,6 +53,18 @@ class Paginator {
 		$this->pages =  $pages;
 	}
 	
+	function query()
+	{
+		$this->offset =  ($this->pages - 1) * $this->articlesPerPage;
+		$selectAllArticles  =
+			$this->connection->prepare("SELECT * FROM articles LIMIT $this->offset,
+				$this->articlesPerPage");
+
+		$selectAllArticles->execute();
+		return  $selectAllArticles->fetchAll( PDO::FETCH_CLASS, 'Article' );
+
+	}
+
 	function paginate()
 	{
 		$this->articles  = $this->query();
