@@ -1,5 +1,5 @@
 <?php
-class Pagination{
+class Paginator {
 	public  $connection;
 	public $articlesPerPage;
 	public $pages;
