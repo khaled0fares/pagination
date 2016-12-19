@@ -1,11 +1,15 @@
 <?php
+
 require 'Paginator.php';
 require 'Article.php';
-$connection =require 'connection.php';
+
+$connection = require 'connection.php';
+
 $pagination = new Paginator($connection, 10);
 $pagination->setArticlesPerPage($_GET['articlesPerPage']);
 $pagination->setPages($_GET['pages']);
 $pagination->paginate();
+
 ?>
 
 <!DOCTYPE html>

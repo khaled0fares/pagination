@@ -6,12 +6,12 @@ class Paginator {
 	public $articles;
 
 	protected $offset;
-	protected $maxPerPage;
+	protected $defaultPerPage;
 
-	public function __construct( $connection, $maxPerPage  = 5)
+	public function __construct( $connection, $defaultPerPage  = 5)
 	{
 		$this->positiveInt();
-		$this->maxPerPage = $maxPerPage;
+		$this->defaultPerPage = $defaultPerPage;
 		$this->connection = $connection;
 	}
 
@@ -40,15 +40,29 @@ class Paginator {
 
 	function setArticlesPerPage($articlesPerPage)
 	{
-		$this->articlesPerPage	 = $articlesPerPage > $this->numberOfRecords() ?
-			$this->maxPerPage :	$articlesPerPage;
+		$this->articlesPerPage	 =
+		   	(int) $articlesPerPage > $this->numberOfRecords() || (int) $articlesPerPage ==  0 			
+			?
+			$this->defaultPerPage :	(int)$articlesPerPage;
 	}
 
 	function setPages($pages)
 	{
 		$lastPagePossible =  ceil($this->numberOfRecords() / $this->articlesPerPage);
-		$this->pages =  $lastPagePossible < (int) $pages  ? $lastPagePossible : (int)$pages;
+		$pages =  (int) $pages;
+		if( $pages <= 0 ){
+			$this->pages = 1;
+			return;
+		} 
+		
+		if ( $pages > $lastPagePossible ) {
+			$this->pages =  $lastPagePossible; 
+			return;
+		} 
+		
+		$this->pages =  $pages;
 	}
+	
 	function paginate()
 	{
 		$this->articles  = $this->query();
