@@ -64,6 +64,7 @@ class Paginator {
 	function setOffset(){
 		$this->offset =  ($this->pages - 1) * $this->recordsPerPage;
 	}
+
 	function query()
 	{
 		$this->setOffset();
