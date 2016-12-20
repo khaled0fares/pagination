@@ -2,11 +2,11 @@
 
 require 'Paginator.php';
 require 'Article.php';
+$db = require 'connection.php';
 
-$connection = require 'connection.php';
 
 $pagination = new Paginator(
-	$connection,
+	$db,
 	10
 );
 
@@ -18,8 +18,9 @@ $pagination->setQuery(
 	"SELECT * FROM $pagination->table LIMIT $pagination->offset,$pagination->recordsPerPage"
 );
 $pagination->mapper = "Article";
-var_dump( $pagination );
+
 $pagination->paginate();
+
 ?>
 
 <!DOCTYPE html>
