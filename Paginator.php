@@ -19,11 +19,8 @@ class Paginator {
 	}
 
 	function numberOfRecords(){
-		$selectAllRecords  = $this->connection->prepare( "SELECT * FROM $this->table" );
-		$selectAllRecords->execute(
-
-		);
-		var_dump($selectAllRecords);
+		$selectAllRecords  = $this->connection->prepare( "SELECT COUNT(*) FROM $this->table" );
+		$selectAllRecords->execute();
 		return (int) $selectAllRecords->fetchAll()[0][0];
 	}
 

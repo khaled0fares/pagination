@@ -18,6 +18,7 @@ $pagination->setQuery(
 	"SELECT * FROM $pagination->table LIMIT $pagination->offset,$pagination->recordsPerPage"
 );
 $pagination->mapper = "Article";
+var_dump( $pagination );
 $pagination->paginate();
 ?>
 
