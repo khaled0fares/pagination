@@ -1,14 +1,16 @@
 <?php
 class Paginator {
 	public  $connection;
-	public $articlesPerPage;
+	public $recordsPerPage;
 	public $pages;
-	public $articles;
+	public $records;
+	public $offset;
+	public $mapper;
 
-	protected $offset;
+	protected $query;
 	protected $defaultPerPage;
 
-	public function __construct( $connection, $defaultPerPage  = 5)
+	public function __construct( $connection, $defaultPerPage  = 5 )
 	{
 		$this->positiveInt();
 		$this->defaultPerPage = $defaultPerPage;
@@ -16,29 +18,29 @@ class Paginator {
 	}
 
 	function numberOfRecords(){
-		$selectAllArticles  = $this->connection->prepare("SELECT COUNT(*) FROM articles");
-		$selectAllArticles->execute();
-		return (int) $selectAllArticles->fetchAll()[0][0];
+		$selectAllRecords  = $this->connection->prepare( "SELECT COUNT(*) FROM articles" );
+		$selectAllRecords->execute();
+		return (int) $selectAllRecords->fetchAll()[0][0];
 	}
 
 
 	function positiveInt()
 	{
-		$this->articlesPerPage   = (int) $this->articlesPerPage   >  0 ? (int) $this->articlesPerPage : 1;
+		$this->recordsPerPage   = (int) $this->recordsPerPage   >  0 ? (int) $this->recordsPerPage : 1;
 		$this->pages  =  (int) $this->pages   >  0 ? (int) $this->pages : 1;
 	}
 
-	function setArticlesPerPage($articlesPerPage)
+	function setRecordsPerPage($recordsPerPage)
 	{
-		$this->articlesPerPage	 =
-			(int) $articlesPerPage > $this->numberOfRecords() || (int) $articlesPerPage <=  0 			
+		$this->recordsPerPage	 =
+			(int) $recordsPerPage > $this->numberOfRecords() || (int) $recordsPerPage <=  0 			
 			?
-			$this->defaultPerPage :	(int)$articlesPerPage;
+			$this->defaultPerPage :	(int)$recordsPerPage;
 	}
 
 	function setPages($pages)
 	{
-		$lastPagePossible =  ceil($this->numberOfRecords() / $this->articlesPerPage);
+		$lastPagePossible =  ceil($this->numberOfRecords() / $this->recordsPerPage);
 		$pages =  (int) $pages;
 		if( $pages <= 0 ){
 			$this->pages = 1;
@@ -52,22 +54,29 @@ class Paginator {
 
 		$this->pages =  $pages;
 	}
-
+	
+	function setQuery( $query )
+	{
+		$this->query  = $query;	
+	}
+	
+	function setOffset(){
+		$this->offset =  ($this->pages - 1) * $this->recordsPerPage;
+	}
 	function query()
 	{
-		$this->offset =  ($this->pages - 1) * $this->articlesPerPage;
-		$selectAllArticles  =
-			$this->connection->prepare("SELECT * FROM articles LIMIT $this->offset,
-				$this->articlesPerPage");
+		$this->setOffset();
+		$selectAllRecords  =
+			$this->connection->prepare($this->query);
 
-		$selectAllArticles->execute();
-		return  $selectAllArticles->fetchAll( PDO::FETCH_CLASS, 'Article' );
+		$selectAllRecords->execute();
+		return  $selectAllRecords->fetchAll( PDO::FETCH_CLASS, $this->mapper );
 
 	}
 
 	function paginate()
 	{
-		$this->articles  = $this->query();
+		$this->records  = $this->query();
 	}
 }
 
