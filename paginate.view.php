@@ -10,11 +10,14 @@ $pagination = new Paginator(
 	10
 );
 
-$pagination->setRecordsPerPage($_GET['articlesPerPage']);
+$pagination->table = "articles";
+$pagination->setRecordsPerPage($_GET['recordsPerPage']);
 $pagination->setPages($_GET['pages']);
-$pagination->mapper = "Article";
 $pagination->setOffset();
-$pagination->setQuery( "SELECT * FROM articles LIMIT $pagination->offset,$pagination->recordsPerPage" );
+$pagination->setQuery( 
+	"SELECT * FROM $pagination->table LIMIT $pagination->offset,$pagination->recordsPerPage"
+);
+$pagination->mapper = "Article";
 $pagination->paginate();
 ?>
 

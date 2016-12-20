@@ -5,6 +5,7 @@ class Paginator {
 	public $pages;
 	public $records;
 	public $offset;
+	public $table;
 	public $mapper;
 
 	protected $query;
@@ -18,8 +19,11 @@ class Paginator {
 	}
 
 	function numberOfRecords(){
-		$selectAllRecords  = $this->connection->prepare( "SELECT COUNT(*) FROM articles" );
-		$selectAllRecords->execute();
+		$selectAllRecords  = $this->connection->prepare( "SELECT * FROM $this->table" );
+		$selectAllRecords->execute(
+
+		);
+		var_dump($selectAllRecords);
 		return (int) $selectAllRecords->fetchAll()[0][0];
 	}
 
