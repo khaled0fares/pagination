@@ -23,7 +23,7 @@ $pagination->setQuery(
 );
 
 $pagination->paginate();
-//$n =  ceil($pagination->numberOfRecords()  / $pagination->recordsPerPage); 
+$n =  ceil($pagination->numberOfRecords()  / $pagination->recordsPerPage); 
 ?>
 
 <!DOCTYPE html>
@@ -36,5 +36,15 @@ $pagination->paginate();
 <?php foreach ($pagination->records as $record):  ?>
 	<h3><?= $record->title; ?></h3>
 <?php endforeach ?>
+
+<?php for( $i = 1; $i <= $n; $i++ ): ?>
+<a 
+href="http://localhost/scripts/pagination/paginate.view.php?
+pages=<?= $i ?>
+&recordsPerPage=<?= $pagination->recordsPerPage ?>"
+>
+	<?= $i; ?>
+</a>
+<?php endfor ?>
 </body>
 </html>
