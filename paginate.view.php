@@ -10,9 +10,10 @@ $pagination = new Paginator(
 );
 
 
-/*if( ! isset( $_GET['page'] ) ||  ! isset( $_GET['pages'] ) ) {
-	header("Location: paginate.view.php?pages=1&recordsPerPage=10");
-}*/
+if( ! isset( $_GET['recordsPerPage'] ) ||  ! isset( $_GET['pages'] ) ) {
+	header("Location: ?pages=1&recordsPerPage=10");
+}
+
 $pagination->table = "articles";
 $pagination->model = "Article";
 $pagination->setRecordsPerPage( $_GET['recordsPerPage'] ); 
@@ -46,5 +47,7 @@ pages=<?= $i ?>
 	<?= $i; ?>
 </a>
 <?php endfor ?>
+
 </body>
 </html>
+
