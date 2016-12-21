@@ -1,4 +1,5 @@
 <?php
+
 class Paginator {
 	public  $connection;
 	public $recordsPerPage;
@@ -6,7 +7,7 @@ class Paginator {
 	public $records;
 	public $offset;
 	public $table;
-	public $mapper;
+	public $model;
 
 	protected $query;
 	protected $defaultPerPage;
@@ -72,7 +73,7 @@ class Paginator {
 			$this->connection->prepare($this->query);
 
 		$selectAllRecords->execute();
-		return  $selectAllRecords->fetchAll( PDO::FETCH_CLASS, $this->mapper );
+		return  $selectAllRecords->fetchAll( PDO::FETCH_CLASS, $this->model );
 
 	}
 
