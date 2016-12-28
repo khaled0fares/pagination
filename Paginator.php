@@ -7,6 +7,7 @@ class Paginator {
 	public $offset;
 	public $table;
 	public $model;
+	public $numberOfAllRecords;
 
 	protected $query;
 	protected $defaultPerPage;
@@ -19,31 +20,31 @@ class Paginator {
 		$this->connection = $connection;
 	}
 
-	function numberOfRecords()
+	public function numberOfRecords($query)
 	{
-		$selectAllRecords  = $this->connection->prepare( "SELECT COUNT(*) FROM $this->table" );
+		$selectAllRecords  = $this->connection->prepare( $query );
 		$selectAllRecords->execute();
-		return (int) $selectAllRecords->fetchAll()[0][0];
+		$this->numberOfAllRecords = (int) $selectAllRecords->fetchAll()[0][0];
 	}
 
 
 	function positiveInt()
 	{
-		$this->recordsPerPage   = (int) $this->recordsPerPage   >  0 ? (int) $this->recordsPerPage : 1;
+		$this->recordsPerPage   = (int) $this->recordsPerPage >  0 ? (int) $this->recordsPerPage : 1;
 		$this->pages  =  (int) $this->pages   >  0 ? (int) $this->pages : 1;
 	}
 
 	function setRecordsPerPage($recordsPerPage)
 	{
 		$this->recordsPerPage	 =
-			(int) $recordsPerPage > $this->numberOfRecords() || (int) $recordsPerPage <=  0 			
+			(int) $recordsPerPage > $this->numberOfAllRecords || (int) $recordsPerPage <=  0 			
 			?
 			$this->defaultPerPage :	(int)$recordsPerPage;
 	}
 
 	function setPages($pages)
 	{
-		$lastPagePossible =  ceil($this->numberOfRecords() / $this->recordsPerPage);
+		$lastPagePossible =  ceil($this->numberOfAllRecords / $this->recordsPerPage);
 		$pages =  (int) $pages;
 		if( $pages <= 0 ){
 			$this->pages = 1;
@@ -63,9 +64,9 @@ class Paginator {
 		$this->query  = $query;	
 	}
 	
-	function setOffset()
+	function setOffset($offset = null)
 	{
-		$this->offset =  ($this->pages - 1) * $this->recordsPerPage;
+		 $this->offset = isset($offset) ? $offset :   ($this->pages - 1) * $this->recordsPerPage;
 	}
 
 	function query()

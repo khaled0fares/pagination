@@ -2,30 +2,28 @@
 
 require 'Paginator.php';
 $db = require 'connection.php';
-
 class Article {}
-
 $pagination = new Paginator(
 	$db,
 	10
 );
 
-
-if( ! isset( $_GET['recordsPerPage'] ) ||  ! isset( $_GET['pages'] ) ) {
-	header("Location: ?pages=1&recordsPerPage=10");
-}
-
 $pagination->table = "articles";
 $pagination->model = "Article";
+$pagination->numberOfRecords(
+	"SELECT COUNT(*) FROM $pagination->table"
+);
+
 $pagination->setRecordsPerPage( $_GET['recordsPerPage'] ); 
 $pagination->setPages( $_GET['pages'] );
+
 $pagination->setOffset();
 $pagination->setQuery( 
 	"SELECT * FROM $pagination->table LIMIT $pagination->offset,$pagination->recordsPerPage"
 );
 
 $pagination->paginate();
-$n =  ceil($pagination->numberOfRecords()  / $pagination->recordsPerPage); 
+$n =  ceil($pagination->numberOfAllRecords  / $pagination->recordsPerPage); 
 
 ?>
 
