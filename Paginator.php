@@ -1,7 +1,6 @@
 <?php
 
 class Paginator {
-	public  $connection;
 	public $recordsPerPage;
 	public $pages;
 	public $records;
@@ -11,6 +10,7 @@ class Paginator {
 
 	protected $query;
 	protected $defaultPerPage;
+	protected  $connection;
 
 	public function __construct( $connection, $defaultPerPage  = 5 )
 	{
@@ -19,7 +19,8 @@ class Paginator {
 		$this->connection = $connection;
 	}
 
-	function numberOfRecords(){
+	function numberOfRecords()
+	{
 		$selectAllRecords  = $this->connection->prepare( "SELECT COUNT(*) FROM $this->table" );
 		$selectAllRecords->execute();
 		return (int) $selectAllRecords->fetchAll()[0][0];
@@ -62,7 +63,8 @@ class Paginator {
 		$this->query  = $query;	
 	}
 	
-	function setOffset(){
+	function setOffset()
+	{
 		$this->offset =  ($this->pages - 1) * $this->recordsPerPage;
 	}
 

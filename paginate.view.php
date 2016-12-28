@@ -1,8 +1,9 @@
 <?php
 
 require 'Paginator.php';
-class Article {}
 $db = require 'connection.php';
+
+class Article {}
 
 $pagination = new Paginator(
 	$db,
@@ -25,6 +26,7 @@ $pagination->setQuery(
 
 $pagination->paginate();
 $n =  ceil($pagination->numberOfRecords()  / $pagination->recordsPerPage); 
+
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +36,7 @@ $n =  ceil($pagination->numberOfRecords()  / $pagination->recordsPerPage);
 	<title></title>
 </head>
 <body>
+
 <?php foreach ($pagination->records as $record):  ?>
 	<h3><?= $record->title; ?></h3>
 <?php endforeach ?>
@@ -46,8 +49,8 @@ pages=<?= $i ?>
 >
 	<?= $i; ?>
 </a>
+
 <?php endfor ?>
 
 </body>
 </html>
-
