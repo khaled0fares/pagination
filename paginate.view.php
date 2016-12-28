@@ -16,14 +16,12 @@ $pagination->numberOfRecords(
 
 $pagination->setRecordsPerPage( $_GET['recordsPerPage'] ); 
 $pagination->setPages( $_GET['pages'] );
-
 $pagination->setOffset();
 $pagination->setQuery( 
 	"SELECT * FROM $pagination->table LIMIT $pagination->offset,$pagination->recordsPerPage"
 );
 
 $pagination->paginate();
-$n =  ceil($pagination->numberOfAllRecords  / $pagination->recordsPerPage); 
 
 ?>
 
@@ -39,7 +37,7 @@ $n =  ceil($pagination->numberOfAllRecords  / $pagination->recordsPerPage);
 	<h3><?= $record->title; ?></h3>
 <?php endforeach ?>
 
-<?php for( $i = 1; $i <= $n; $i++ ): ?>
+<?php for( $i = 1; $i <= $pagination->numberOfPages(); $i++ ): ?>
 <a 
 href="http://localhost/scripts/pagination/paginate.view.php?
 pages=<?= $i ?>

@@ -58,15 +58,20 @@ class Paginator {
 
 		$this->pages =  $pages;
 	}
-	
+
 	function setQuery( $query )
 	{
 		$this->query  = $query;	
 	}
-	
+
 	function setOffset($offset = null)
 	{
-		 $this->offset = isset($offset) ? $offset :   ($this->pages - 1) * $this->recordsPerPage;
+		$this->offset = isset($offset) ? $offset :   ($this->pages - 1) * $this->recordsPerPage;
+	}
+
+	function numberOfPages(){
+
+		return ceil($this->numberOfAllRecords  / $this->recordsPerPage); 
 	}
 
 	function query()
